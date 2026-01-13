@@ -71,15 +71,16 @@ async def upload_document(file: UploadFile, db: AsyncSession = Depends(get_db)):
 
 @router.get("/documents")
 async def list_documents(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Document))
+    from sqlalchemy.orm import selectinload
+
+    result = await db.execute(
+        select(Document).options(selectinload(Document.processing_status))
+    )
     documents = result.scalars().all()
 
     response = []
     for doc in documents:
-        status_result = await db.execute(
-            select(ProcessingStatus).where(ProcessingStatus.document_id == doc.id)
-        )
-        status = status_result.scalar_one_or_none()
+        status = doc.processing_status
         response.append(
             DocumentResponse(
                 id=doc.id,
