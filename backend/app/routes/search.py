@@ -10,8 +10,8 @@ router = APIRouter()
 
 @router.get("/search")
 async def search_documents(q: str, db: AsyncSession = Depends(get_db)):
-    query = text(f"SELECT id, filename, content FROM documents WHERE content ILIKE '%{q}%'")
-    result = await db.execute(query)
+    query = text("SELECT id, filename, content FROM documents WHERE content ILIKE :search_term")
+    result = await db.execute(query, {"search_term": f"%{q}%"})
     rows = result.fetchall()
 
     results = []
