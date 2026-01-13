@@ -46,6 +46,13 @@ function DocumentList({ refreshTrigger }) {
               <div className="document-meta">
                 {doc.page_count} pages | {formatFileSize(doc.file_size)} | {doc.status}
               </div>
+              {doc.tags && doc.tags.length > 0 && (
+                <div className="document-tags">
+                  {doc.tags.map(tag => (
+                    <span key={tag.id} className="tag">{tag.name}</span>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="document-meta">
               {new Date(doc.created_at).toLocaleDateString()}
