@@ -1,27 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { getDocuments } from '../api'
 
-function DocumentList() {
+function DocumentList({ refreshTrigger }) {
   const [documents, setDocuments] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    loadDocuments()
-  }, [])
-
-  async function loadDocuments() {
+  const loadDocuments = useCallback(async () => {
     try {
       setLoading(true)
       const data = await getDocuments()
       setDocuments(data)
-    } catch (err) {
+    } catch {
       setError('Failed to load documents')
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    loadDocuments()
+  }, [refreshTrigger, loadDocuments])
 
   if (loading) {
     return <div className="loading">Loading documents...</div>

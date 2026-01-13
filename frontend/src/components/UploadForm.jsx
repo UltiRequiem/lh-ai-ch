@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { uploadDocument } from '../api'
 
-function UploadForm() {
+function UploadForm({ onUploadSuccess }) {
   const [file, setFile] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -13,10 +14,14 @@ function UploadForm() {
     try {
       setUploading(true)
       setError(null)
+      setSuccess(false)
       await uploadDocument(file)
       setFile(null)
       e.target.reset()
-      window.location.reload()
+      setSuccess(true)
+      if (onUploadSuccess) {
+        onUploadSuccess()
+      }
     } catch (err) {
       setError('Failed to upload document')
     } finally {
@@ -28,6 +33,7 @@ function UploadForm() {
     <div className="upload-form">
       <h2>Upload Document</h2>
       {error && <div className="error">{error}</div>}
+      {success && <div className="success">Document uploaded successfully!</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="file"
