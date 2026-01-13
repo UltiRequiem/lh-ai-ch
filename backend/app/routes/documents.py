@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, UploadFile, HTTPException
 from sqlalchemy import select
@@ -13,21 +14,42 @@ from app.config import settings
 
 router = APIRouter()
 
+MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
+ALLOWED_EXTENSIONS = {".pdf"}
+
 
 @router.post("/documents")
 async def upload_document(file: UploadFile, db: AsyncSession = Depends(get_db)):
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No filename provided")
+
+    file_ext = Path(file.filename).suffix.lower()
+    if file_ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+
+    safe_filename = Path(file.filename).name
+    if ".." in safe_filename or "/" in safe_filename or "\\" in safe_filename:
+        raise HTTPException(status_code=400, detail="Invalid filename")
+
     os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
-    file_path = os.path.join(settings.UPLOAD_DIR, file.filename)
+    file_path = os.path.join(settings.UPLOAD_DIR, safe_filename)
 
     with open(file_path, "wb") as f:
         content = await file.read()
+        if len(content) > MAX_FILE_SIZE:
+            raise HTTPException(status_code=413, detail=f"File size exceeds {MAX_FILE_SIZE} bytes")
         f.write(content)
 
     file_size = len(content)
-    text_content, page_count = await extract_text_from_pdf(file_path)
+
+    try:
+        text_content, page_count = await extract_text_from_pdf(file_path)
+    except Exception as e:
+        os.remove(file_path)
+        raise HTTPException(status_code=400, detail=f"Failed to process PDF: {str(e)}")
 
     document = Document(
-        filename=file.filename,
+        filename=safe_filename,
         content=text_content,
         file_size=file_size,
         page_count=page_count,
