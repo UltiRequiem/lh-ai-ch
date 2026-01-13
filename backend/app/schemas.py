@@ -1,6 +1,22 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
+
+
+class TagBase(BaseModel):
+    name: str
+
+
+class TagCreate(TagBase):
+    pass
+
+
+class TagResponse(TagBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
 
 
 class DocumentBase(BaseModel):
@@ -17,6 +33,7 @@ class DocumentResponse(DocumentBase):
     page_count: Optional[int] = None
     status: str
     created_at: datetime
+    tags: List[TagResponse] = []
 
     class Config:
         from_attributes = True
@@ -30,3 +47,7 @@ class SearchResult(BaseModel):
     id: int
     filename: str
     snippet: str
+
+
+class AddTagsRequest(BaseModel):
+    tag_names: List[str]
