@@ -35,12 +35,19 @@ function UploadForm({ onUploadSuccess }) {
       {error && <div className="error">{error}</div>}
       {success && <div className="success">Document uploaded successfully!</div>}
       <form onSubmit={handleSubmit}>
-        <input
-          type="file"
-          accept=".pdf,application/pdf"
-          onChange={(e) => setFile(e.target.files[0])}
-          disabled={uploading}
-        />
+        <div className="file-input-wrapper">
+          <label htmlFor="file-input" className="file-input-label">
+            {file ? file.name : 'Choose PDF file...'}
+          </label>
+          <input
+            id="file-input"
+            type="file"
+            accept=".pdf,application/pdf"
+            onChange={(e) => setFile(e.target.files[0])}
+            disabled={uploading}
+            className="file-input-hidden"
+          />
+        </div>
         <button type="submit" disabled={!file || uploading}>
           {uploading ? 'Uploading...' : 'Upload'}
         </button>

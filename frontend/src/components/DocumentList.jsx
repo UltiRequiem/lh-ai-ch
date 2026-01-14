@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { getDocuments, getTags } from "../api";
+import { getDocuments, getTags, deleteDocument } from "../api";
 import { getTagColor } from "../utils/tagColors";
 
 function DocumentList({ refreshTrigger }) {
@@ -9,6 +9,7 @@ function DocumentList({ refreshTrigger }) {
   const [error, setError] = useState(null);
   const [availableTags, setAvailableTags] = useState([]);
   const [selectedTag, setSelectedTag] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const loadTags = useCallback(async () => {
     try {
@@ -44,6 +45,22 @@ function DocumentList({ refreshTrigger }) {
 
   const handleTagClick = (tagName) => {
     setSelectedTag(selectedTag === tagName ? null : tagName);
+  };
+
+  const handleDelete = async (docId, filename) => {
+    if (!confirm(`Are you sure you want to delete "${filename}"?`)) {
+      return;
+    }
+
+    try {
+      setDeletingId(docId);
+      await deleteDocument(docId);
+      await loadDocuments();
+    } catch {
+      setError("Failed to delete document");
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   if (loading) {
@@ -127,8 +144,19 @@ function DocumentList({ refreshTrigger }) {
                 </div>
               )}
             </div>
-            <div className="document-meta">
-              {new Date(doc.created_at).toLocaleDateString()}
+            <div className="document-actions">
+              <div className="document-meta">
+                {new Date(doc.created_at).toLocaleDateString()}
+              </div>
+              <button
+                type="button"
+                className="delete-doc-btn"
+                onClick={() => handleDelete(doc.id, doc.filename)}
+                disabled={deletingId === doc.id}
+                title={`Delete ${doc.filename}`}
+              >
+                {deletingId === doc.id ? "Deleting..." : "Delete"}
+              </button>
             </div>
           </div>
         ))
