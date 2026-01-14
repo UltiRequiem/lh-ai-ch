@@ -93,7 +93,15 @@ function DocumentDetail() {
             document.tags.map(tag => (
               <span key={tag.id} className="tag">
                 {tag.name}
-                <button type="button" onClick={() => handleRemoveTag(tag.id)} className="remove-tag">×</button>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveTag(tag.id)}
+                  className="remove-tag"
+                  title={`Remove tag "${tag.name}"`}
+                  aria-label={`Remove tag ${tag.name}`}
+                >
+                  ×
+                </button>
               </span>
             ))
           ) : (
