@@ -23,7 +23,7 @@ function UploadForm({ onUploadSuccess }) {
         onUploadSuccess()
       }
     } catch (err) {
-      setError('Failed to upload document')
+      setError(err.message || 'Failed to upload document')
     } finally {
       setUploading(false)
     }

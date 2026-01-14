@@ -7,6 +7,12 @@ export async function uploadDocument(file) {
     method: 'POST',
     body: formData,
   });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Upload failed');
+  }
+
   return response.json();
 }
 
