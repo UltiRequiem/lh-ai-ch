@@ -370,3 +370,63 @@ body {
   background-color: #bdc3c7;
   cursor: not-allowed;
 }
+
+/* Tag Filter Section */
+.tag-filter-section {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  background-color: #fafafa;
+}
+
+.tag-filter-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.tag-filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-filter-btn {
+  padding: 0.375rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.tag-filter-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tag-filter-btn.active {
+  border-color: #3498db;
+  background-color: #e8f4f8;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.tag-filter-clear {
+  padding: 0.375rem 0.75rem;
+  border: none;
+  border-radius: 12px;
+  background-color: #e74c3c;
+  color: white;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.tag-filter-clear:hover {
+  background-color: #c0392b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}

@@ -16,8 +16,9 @@ export async function uploadDocument(file) {
   return response.json();
 }
 
-export async function getDocuments() {
-  const response = await fetch(`${API_BASE}/documents`);
+export async function getDocuments(tag = null) {
+  const url = tag ? `${API_BASE}/documents?tag=${encodeURIComponent(tag)}` : `${API_BASE}/documents`;
+  const response = await fetch(url);
   return response.json();
 }
 

@@ -37,6 +37,7 @@ function UploadForm({ onUploadSuccess }) {
       <form onSubmit={handleSubmit}>
         <input
           type="file"
+          accept=".pdf,application/pdf"
           onChange={(e) => setFile(e.target.files[0])}
           disabled={uploading}
         />

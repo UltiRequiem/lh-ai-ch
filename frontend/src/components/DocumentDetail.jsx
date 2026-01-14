@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getDocument, deleteDocument, addTagsToDocument, removeTagFromDocument } from '../api'
+import { getTagColor } from '../utils/tagColors'
 
 function DocumentDetail() {
   const { id } = useParams()
@@ -90,20 +91,30 @@ function DocumentDetail() {
         <h3>Tags</h3>
         <div className="tags-list">
           {document.tags && document.tags.length > 0 ? (
-            document.tags.map(tag => (
-              <span key={tag.id} className="tag">
-                {tag.name}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveTag(tag.id)}
-                  className="remove-tag"
-                  title={`Remove tag "${tag.name}"`}
-                  aria-label={`Remove tag ${tag.name}`}
+            document.tags.map(tag => {
+              const colors = getTagColor(tag.name)
+              return (
+                <span
+                  key={tag.id}
+                  className="tag"
+                  style={{
+                    backgroundColor: colors.bg,
+                    color: colors.text
+                  }}
                 >
-                  ×
-                </button>
-              </span>
-            ))
+                  {tag.name}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveTag(tag.id)}
+                    className="remove-tag"
+                    title={`Remove tag "${tag.name}"`}
+                    aria-label={`Remove tag ${tag.name}`}
+                  >
+                    ×
+                  </button>
+                </span>
+              )
+            })
           ) : (
             <p>No tags yet</p>
           )}

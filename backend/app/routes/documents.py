@@ -31,6 +31,11 @@ async def upload_document(file: UploadFile, db: AsyncSession = Depends(get_db)):
     if ".." in safe_filename or "/" in safe_filename or "\\" in safe_filename:
         raise HTTPException(status_code=400, detail="Invalid filename")
 
+    # Check if document with same filename already exists
+    existing_doc = await db.execute(select(Document).where(Document.filename == safe_filename))
+    if existing_doc.scalar_one_or_none():
+        raise HTTPException(status_code=409, detail=f"A document with the filename '{safe_filename}' already exists")
+
     os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
     file_path = os.path.join(settings.UPLOAD_DIR, safe_filename)
 
