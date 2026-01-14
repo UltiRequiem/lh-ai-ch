@@ -23,6 +23,7 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/docproc
+      ALLOWED_ORIGINS: http://localhost:5173
     depends_on:
       db:
         condition: service_healthy
