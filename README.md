@@ -1,5 +1,7 @@
 # DocProc
 
+![Screenshot](./screenshot.png)
+
 A simple document processing system for uploading, viewing, and searching PDF documents.
 
 ## Features
@@ -26,12 +28,14 @@ A simple document processing system for uploading, viewing, and searching PDF do
 ### Running the Application
 
 1. Clone the repository:
+
    ```bash
    git clone <repository-url>
    cd docproc
    ```
 
 2. Start all services:
+
    ```bash
    docker-compose up --build
    ```
@@ -46,6 +50,7 @@ A simple document processing system for uploading, viewing, and searching PDF do
 To run services individually for development:
 
 **Backend:**
+
 ```bash
 cd backend
 pip install -r requirements.txt
@@ -53,6 +58,7 @@ uvicorn app.main:app --reload
 ```
 
 **Frontend:**
+
 ```bash
 cd frontend
 npm install
@@ -63,24 +69,24 @@ npm run dev
 
 ### Documents
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/documents` | Upload a PDF document |
-| GET | `/documents` | List all documents |
-| GET | `/documents/{id}` | Get document details |
-| DELETE | `/documents/{id}` | Delete a document |
+| Method | Endpoint          | Description           |
+| ------ | ----------------- | --------------------- |
+| POST   | `/documents`      | Upload a PDF document |
+| GET    | `/documents`      | List all documents    |
+| GET    | `/documents/{id}` | Get document details  |
+| DELETE | `/documents/{id}` | Delete a document     |
 
 ### Search
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/search?q={query}` | Search documents by content |
+| Method | Endpoint            | Description                 |
+| ------ | ------------------- | --------------------------- |
+| GET    | `/search?q={query}` | Search documents by content |
 
 ### Health
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/health` | Health check endpoint |
+| Method | Endpoint  | Description           |
+| ------ | --------- | --------------------- |
+| GET    | `/health` | Health check endpoint |
 
 ## Project Structure
 
@@ -114,12 +120,12 @@ docproc/
 
 ### Backend
 
-| Variable | Description | Default |
-|----------|-------------|---------|
+| Variable       | Description                  | Default                |
+| -------------- | ---------------------------- | ---------------------- |
 | `DATABASE_URL` | PostgreSQL connection string | See docker-compose.yml |
 
 ### Frontend
 
-| Variable | Description | Default |
-|----------|-------------|---------|
+| Variable       | Description     | Default                 |
+| -------------- | --------------- | ----------------------- |
 | `VITE_API_URL` | Backend API URL | `http://localhost:8000` |
